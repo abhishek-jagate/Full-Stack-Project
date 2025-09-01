@@ -1,0 +1,7 @@
+C:\Users\Abhishek\Downloads\New Project\MaterialApi\obj\Debug\net6.0\MaterialApi.csproj.AssemblyReference.cache
+C:\Users\Abhishek\Downloads\New Project\MaterialApi\obj\Debug\net6.0\MaterialApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Abhishek\Downloads\New Project\MaterialApi\obj\Debug\net6.0\MaterialApi.AssemblyInfoInputs.cache
+C:\Users\Abhishek\Downloads\New Project\MaterialApi\obj\Debug\net6.0\MaterialApi.AssemblyInfo.cs
+C:\Users\Abhishek\Downloads\New Project\MaterialApi\obj\Debug\net6.0\MaterialApi.csproj.CoreCompileInputs.cache
+C:\Users\Abhishek\Downloads\New Project\MaterialApi\obj\Debug\net6.0\MaterialApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Abhishek\Downloads\New Project\MaterialApi\obj\Debug\net6.0\MaterialApi.MvcApplicationPartsAssemblyInfo.cache
