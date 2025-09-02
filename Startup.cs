@@ -1,13 +1,12 @@
 using MaterialApi.Data;
-using Microsoft.EntityFrameworkCore;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using MaterialApi.Data;
+using Microsoft.OpenApi.Models;
+using System;
 
 public class Startup
 {
@@ -20,17 +19,27 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        var connectionString = Configuration.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new InvalidOperationException("The connection string 'DefaultConnection' was not found.");
+        }
         services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(connectionString));
 
+        services.AddControllers().AddNewtonsoftJson();
 
-        services.AddControllers();
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAllOrigins",
                 builder => builder.AllowAnyOrigin()
                                   .AllowAnyMethod()
                                   .AllowAnyHeader());
+        });
+
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "MaterialApi", Version = "v1" });
         });
     }
 
@@ -39,18 +48,14 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Home/Error");
-            app.UseHsts();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MaterialApi v1"));
         }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
-
+        
         app.UseRouting();
-
+        
         app.UseCors("AllowAllOrigins");
 
         app.UseAuthorization();
@@ -61,3 +66,4 @@ public class Startup
         });
     }
 }
+

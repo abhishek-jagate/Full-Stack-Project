@@ -6,30 +6,33 @@ namespace MaterialApi.Models
     public class Material
     {
         [Key]
-        public int Id { get; set; }   // Primary Key
+        public int MaterialId { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        public string Name { get; set; }   // 1. Material Name
+        [Required(ErrorMessage = "Material name is required.")]
+        [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
+        public string Name { get; set; } = string.Empty;
 
-        [MaxLength(250)]
-        public string Description { get; set; }   // 2. Description
+        [Required(ErrorMessage = "Category is required.")]
+        public string Category { get; set; } = string.Empty;
 
-        [Required]
-        public string Category { get; set; }   // 3. Category
+        public string? Brand { get; set; }
 
-        public string Supplier { get; set; }   // 4. Supplier
+        [Required(ErrorMessage = "Unit price is required.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Unit price must be greater than 0.")]
+        public decimal UnitPrice { get; set; }
 
-        public int Quantity { get; set; }   // 5. Quantity
+        public string UnitOfMeasure { get; set; } = string.Empty;
 
-        public decimal UnitPrice { get; set; }   // 6. Price per unit
+        public int InStockQty { get; set; }
 
-        public DateTime PurchaseDate { get; set; }   // 7. Purchase date
+        public int ReorderLevel { get; set; }
 
-        public bool IsAvailable { get; set; }   // 8. Availability
+        [Range(0, 28, ErrorMessage = "GST must be between 0 and 28.")]
+        public decimal GstPercent { get; set; }
 
-        public string Location { get; set; }   // 9. Storage location
+        public bool IsActive { get; set; } = true;
 
-        public string Notes { get; set; }   // 10. Extra notes
+        public DateTime AddedOn { get; set; } = DateTime.Now;
     }
 }
+

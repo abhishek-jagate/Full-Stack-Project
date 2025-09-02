@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Create Material - MaterialKing</title>
+    <!-- Kendo UI CSS -->
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2024.2.514/styles/kendo.default-v2.min.css" />
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        #materialForm {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Kendo controls should take full width */
+        .k-textbox, .k-dropdownlist, .k-numerictextbox, .k-datepicker, .k-switch {
+            width: 100%;
+        }
+        
+        #submit-button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        /* Notification positioning */
+         #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10005;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification widget will appear here -->
+    <span id="notification"></span>
+
+    <div id="app-container">
+        <h1>Create New Material</h1>
+        
+        <!-- The form for creating a new material -->
+        <form id="materialForm">
+
+            <div class="form-group">
+                <label for="name">Material Name:</label>
+                <input id="name" required validationMessage="Please enter a name." />
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <input id="category" required validationMessage="Please select a category." />
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand:</label>
+                <input id="brand" />
+            </div>
+
+            <div class="form-group">
+                <label for="unitPrice">Unit Price:</label>
+                <input id="unitPrice" type="number" required min="0.01" validationMessage="Price must be greater than 0." />
+            </div>
+
+            <div class="form-group">
+                <label>Unit of Measure:</label>
+                <ul id="unitOfMeasure"></ul>
+            </div>
+
+            <div class="form-group">
+                <label for="inStockQty">In Stock Quantity:</label>
+                <input id="inStockQty" type="number" />
+            </div>
+
+            <div class="form-group">
+                <label for="reorderLevel">Reorder Level:</label>
+                <input id="reorderLevel" type="number" />
+            </div>
+            
+            <div class="form-group">
+                <label for="gstPercent">GST Percentage:</label>
+                <input id="gstPercent" type="number" required min="0" max="28" validationMessage="GST must be between 0 and 28." />
+            </div>
+
+             <div class="form-group">
+                <label for="addedOn">Purchase Date:</label>
+                <input id="addedOn" />
+            </div>
+
+            <div class="form-group">
+                <label for="isActive">Is Active:</label>
+                <input id="isActive" type="checkbox" />
+            </div>
+
+            <button type="submit" id="submit-button" class="k-button k-button-md k-rounded-md k-button-solid-primary">Save Material</button>
+        </form>
+    </div>
+
+    <!-- jQuery and Kendo UI JavaScript -->
+    <script src="https://kendo.cdn.telerik.com/2024.2.514/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2024.2.514/js/kendo.all.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // --- Initialize Kendo UI Widgets ---
+
+            // Initialize the notification widget
+            var notification = $("#notification").kendoNotification({
+                position: { top: 30, right: 30 },
+                autoHideAfter: 5000, // 5 seconds
+                stacking: "down"
+            }).data("kendoNotification");
+
+            // TextBoxes
+            $("#name").kendoTextBox();
+            $("#brand").kendoTextBox();
+
+            // DropDownList for Category
+            $("#category").kendoDropDownList({
+                dataSource: [ "Cement", "Steel", "Sand", "Aggregate", "Bricks" ],
+                optionLabel: "Select a category..."
+            });
+
+            // NumericTextBoxes for numbers
+            $("#unitPrice").kendoNumericTextBox({ format: "c", decimals: 2, min: 0.01 });
+            $("#inStockQty").kendoNumericTextBox({ format: "n0", decimals: 0, min: 0 });
+            $("#reorderLevel").kendoNumericTextBox({ format: "n0", decimals: 0, min: 0 });
+            $("#gstPercent").kendoNumericTextBox({ format: "n2", min: 0, max: 28, step: 0.5 });
+
+            // RadioGroup for Unit of Measure
+            $("#unitOfMeasure").kendoRadioGroup({
+                items: [ "Bag", "Kg", "Ton" ],
+                layout: "horizontal",
+                value: "Bag" // Default value
+            });
+            
+            // DatePicker for the purchase date
+            $("#addedOn").kendoDatePicker({
+                value: new Date(), // Default to today
+                format: "yyyy-MM-dd"
+            });
+
+            // Switch for IsActive
+            $("#isActive").kendoSwitch({
+                checked: true,
+                messages: {
+                    checked: "Yes",
+                    unchecked: "No"
+                }
+            });
+
+            // Initialize Kendo Validator
+            var validator = $("#materialForm").kendoValidator().data("kendoValidator");
+
+
+            // --- Handle Form Submission ---
+            $("#materialForm").on("submit", function (event) {
+                event.preventDefault(); // Prevent the default form submission (page refresh)
+
+                // Check if the form is valid
+                if (validator.validate()) {
+
+                    // Collect data from the Kendo widgets
+                    const materialData = {
+                        name: $("#name").val(),
+                        category: $("#category").data("kendoDropDownList").value(),
+                        brand: $("#brand").val(),
+                        unitPrice: $("#unitPrice").data("kendoNumericTextBox").value(),
+                        unitOfMeasure: $("#unitOfMeasure").data("kendoRadioGroup").value(),
+                        inStockQty: $("#inStockQty").data("kendoNumericTextBox").value(),
+                        reorderLevel: $("#reorderLevel").data("kendoNumericTextBox").value(),
+                        gstPercent: $("#gstPercent").data("kendoNumericTextBox").value(),
+                        isActive: $("#isActive").data("kendoSwitch").check(),
+                        addedOn: kendo.toString($("#addedOn").data("kendoDatePicker").value(), "yyyy-MM-ddTHH:mm:ss")
+                    };
+                    
+                    // Send the data to the backend API via AJAX
+                    $.ajax({
+                        url: "/api/materials",
+                        method: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(materialData),
+                        success: function (response) {
+                            notification.show("Material saved successfully!", "success");
+                            // Optional: Reset the form after successful submission
+                             $("#materialForm")[0].reset();
+                             // You might need to manually reset Kendo widgets to their defaults here
+                             $("#category").data("kendoDropDownList").select(0);
+                             $("#addedOn").data("kendoDatePicker").value(new Date());
+                             $("#isActive").data("kendoSwitch").check(true);
+
+                        },
+                        error: function (xhr) {
+                            // Try to parse the error response from the server
+                            var errorMessage = "An unknown error occurred.";
+                            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                                // Handle validation errors from the backend
+                                var errors = xhr.responseJSON.errors;
+                                var messages = [];
+                                for (var key in errors) {
+                                    if (errors.hasOwnProperty(key)) {
+                                        messages.push(errors[key].join(' '));
+                                    }
+                                }
+                                errorMessage = messages.join('<br>');
+                            }
+                            notification.show(errorMessage, "error");
+                        }
+                    });
+                } else {
+                     notification.show("Please correct the form errors.", "error");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+

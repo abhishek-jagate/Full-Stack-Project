@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MaterialApi.Data;
 using MaterialApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,9 +12,9 @@ namespace MaterialApi.Controllers
     [ApiController]
     public class MaterialsController : ControllerBase
     {
-        private readonly MaterialContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public MaterialsController(MaterialContext context)
+        public MaterialsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,7 +23,7 @@ namespace MaterialApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Material>>> GetMaterials()
         {
-            return await _context.Materials.ToListAsync();
+            return await _context.Materials.OrderByDescending(m => m.AddedOn).ToListAsync();
         }
 
         // GET: api/materials/{id}
@@ -54,6 +53,52 @@ namespace MaterialApi.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetMaterial), new { id = material.MaterialId }, material);
+        }
+
+        // PUT: api/materials/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMaterial(int id, Material material)
+        {
+            if (id != material.MaterialId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(material).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Materials.Any(e => e.MaterialId == id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // DELETE: api/materials/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMaterial(int id)
+        {
+            var material = await _context.Materials.FindAsync(id);
+            if (material == null)
+            {
+                return NotFound();
+            }
+
+            _context.Materials.Remove(material);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
