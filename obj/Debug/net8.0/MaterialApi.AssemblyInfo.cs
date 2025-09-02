@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MaterialApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f1bb9d83ecab3e73fea9c95171b513833815eff7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b65a7ffb8db6001b232d52bf51393a0ff9b13b72")]
 [assembly: System.Reflection.AssemblyProductAttribute("MaterialApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MaterialApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
