@@ -2,189 +2,563 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Material King</title>
-    <!-- Kendo UI CSS -->
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2024.2.514/styles/kendo.default-v2.min.css" />
-    <!-- Custom Styles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Material - MaterialKing</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #f4f4f4; }
-        #app-container { max-width: 900px; margin: 0 auto; }
-        .page-content { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: none; /* Pages are hidden by default */ }
-        h1, h2 { text-align: center; color: #333; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
-        .k-textbox, .k-dropdownlist, .k-numerictextbox, .k-datepicker, .k-switch, .k-grid { width: 100%; }
-        #submit-button { width: 100%; padding: 12px; font-size: 16px; }
-        #notification { position: fixed; top: 20px; right: 20px; z-index: 10005; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-control:hover {
+            border-color: #b8c6db;
+        }
+
+        select.form-control {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+            appearance: none;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .radio-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .radio-option:has(input:checked) {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .switch-label {
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            max-width: 300px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .error-text {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error .form-control {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .form-group.error .error-text {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 25px;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Create New Material</h1>
+        
+        <form id="materialForm">
+            <div class="form-group">
+                <label for="name">Material Name</label>
+                <input type="text" id="name" class="form-control" placeholder="Enter material name" required>
+                <div class="error-text">Material name is required</div>
+            </div>
 
-    <span id="notification"></span>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" class="form-control" required>
+                    <option value="">Select a category...</option>
+                    <option value="Cement">Cement</option>
+                    <option value="Steel">Steel</option>
+                    <option value="Sand">Sand</option>
+                    <option value="Aggregate">Aggregate</option>
+                    <option value="Bricks">Bricks</option>
+                </select>
+                <div class="error-text">Please select a category</div>
+            </div>
 
-    <div id="app-container">
-        <h1>Material King</h1>
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" class="form-control" placeholder="Enter brand name (optional)">
+            </div>
 
-        <!-- Main Navigation -->
-        <div id="toolbar"></div>
+            <div class="form-group">
+                <label for="unitPrice">Unit Price</label>
+                <input type="number" id="unitPrice" class="form-control" placeholder="0.00" step="0.01" min="0.01" required>
+                <div class="error-text">Price must be greater than 0</div>
+            </div>
 
-        <!-- Create Page Content -->
-        <div id="createPage" class="page-content">
-            <h2>Create New Material</h2>
-            <form id="materialForm">
-                <!-- Form fields from before -->
-                <div class="form-group"><label for="name">Material Name:</label><input id="name" required validationMessage="Please enter a name." /></div>
-                <div class="form-group"><label for="category">Category:</label><input id="category" required validationMessage="Please select a category." /></div>
-                <div class="form-group"><label for="brand">Brand:</label><input id="brand" /></div>
-                <div class="form-group"><label for="unitPrice">Unit Price:</label><input id="unitPrice" type="number" required min="0.01" validationMessage="Price must be greater than 0." /></div>
-                <div class="form-group"><label>Unit of Measure:</label><ul id="unitOfMeasure"></ul></div>
-                <div class="form-group"><label for="inStockQty">In Stock Quantity:</label><input id="inStockQty" type="number" /></div>
-                <div class="form-group"><label for="reorderLevel">Reorder Level:</label><input id="reorderLevel" type="number" /></div>
-                <div class="form-group"><label for="gstPercent">GST Percentage:</label><input id="gstPercent" type="number" required min="0" max="28" validationMessage="GST must be between 0 and 28." /></div>
-                <div class="form-group"><label for="addedOn">Purchase Date:</label><input id="addedOn" /></div>
-                <div class="form-group"><label for="isActive">Is Active:</label><input id="isActive" type="checkbox" /></div>
-                <button type="submit" id="submit-button" class="k-button k-button-md k-rounded-md k-button-solid-primary">Save Material</button>
-            </form>
-        </div>
+            <div class="form-group">
+                <label>Unit of Measure</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="uom-bag" name="unitOfMeasure" value="Bag" checked>
+                        <label for="uom-bag">Bag</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="uom-kg" name="unitOfMeasure" value="Kg">
+                        <label for="uom-kg">Kg</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="uom-ton" name="unitOfMeasure" value="Ton">
+                        <label for="uom-ton">Ton</label>
+                    </div>
+                </div>
+            </div>
 
-        <!-- List Page Content -->
-        <div id="listPage" class="page-content">
-            <h2>Material List</h2>
-            <div id="materialsGrid"></div>
-        </div>
+            <div class="form-group">
+                <label for="inStockQty">In Stock Quantity</label>
+                <input type="number" id="inStockQty" class="form-control" placeholder="0" min="0" step="1">
+            </div>
 
+            <div class="form-group">
+                <label for="reorderLevel">Reorder Level</label>
+                <input type="number" id="reorderLevel" class="form-control" placeholder="0" min="0" step="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="gstPercent">GST Percentage</label>
+                <input type="number" id="gstPercent" class="form-control" placeholder="0.00" step="0.5" min="0" max="28" required>
+                <div class="error-text">GST must be between 0 and 28</div>
+            </div>
+
+            <div class="form-group">
+                <label for="addedOn">Purchase Date</label>
+                <input type="date" id="addedOn" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Is Active</label>
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" id="isActive" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="switch-label" id="switch-label">Active</span>
+                </div>
+            </div>
+
+            <button type="submit" id="submit-button" class="btn btn-primary">
+                Save Material
+            </button>
+            <button type="button" id="test-data-button" class="btn btn-secondary">
+                Test Data Collection
+            </button>
+        </form>
     </div>
 
-    <!-- *** CORRECTED SCRIPT ORDER *** -->
-    <!-- 1. jQuery must be loaded FIRST -->
-    <script src="https://kendo.cdn.telerik.com/2024.2.514/js/jquery.min.js"></script>
-    <!-- 2. Kendo UI can now be loaded -->
-    <script src="https://kendo.cdn.telerik.com/2024.2.514/js/kendo.all.min.js"></script>
-    
     <script>
-        $(document).ready(function () {
-            // --- Navigation Logic ---
-            $("#toolbar").kendoToolBar({
-                items: [
-                    { type: "button", text: "Create New", click: () => showPage("createPage") },
-                    { type: "button", text: "View List", click: () => showPage("listPage") }
-                ]
-            });
-
-            function showPage(pageId) {
-                $(".page-content").hide(); // Hide all pages
-                $("#" + pageId).show(); // Show the requested page
-                if (pageId === 'listPage') {
-                    // Check if grid exists before trying to refresh
-                    var grid = $("#materialsGrid").data("kendoGrid");
-                    if (grid) {
-                        grid.dataSource.read(); // Refresh grid data
-                    }
-                }
-            }
-
-            // --- Kendo Widget Initialization ---
-            var notification = $("#notification").kendoNotification({ position: { top: 30, right: 30 }, autoHideAfter: 5000, stacking: "down" }).data("kendoNotification");
-            $("#name").kendoTextBox();
-            $("#brand").kendoTextBox();
-            $("#category").kendoDropDownList({ dataSource: ["Cement", "Steel", "Sand", "Aggregate", "Bricks"], optionLabel: "Select a category..." });
-            $("#unitPrice").kendoNumericTextBox({ format: "c", decimals: 2, min: 0.01 });
-            $("#inStockQty").kendoNumericTextBox({ format: "n0", decimals: 0, min: 0 });
-            $("#reorderLevel").kendoNumericTextBox({ format: "n0", decimals: 0, min: 0 });
-            $("#gstPercent").kendoNumericTextBox({ format: "n2", min: 0, max: 28, step: 0.5 });
-            $("#unitOfMeasure").kendoRadioGroup({ items: ["Bag", "Kg", "Ton"], layout: "horizontal", value: "Bag" });
-            $("#addedOn").kendoDatePicker({ value: new Date(), format: "yyyy-MM-dd" });
-            $("#isActive").kendoSwitch({ checked: true, messages: { checked: "Yes", unchecked: "No" } });
-            var validator = $("#materialForm").kendoValidator().data("kendoValidator");
-
-            // --- Kendo Grid for Material List ---
-            $("#materialsGrid").kendoGrid({
-                dataSource: {
-                    transport: {
-                        read: {
-                            url: "/api/materials",
-                            dataType: "json"
-                        }
-                    },
-                    schema: {
-                        model: {
-                            fields: {
-                                materialId: { type: "number" },
-                                name: { type: "string" },
-                                category: { type: "string" },
-                                brand: { type: "string" },
-                                unitPrice: { type: "number" },
-                                inStockQty: { type: "number" }
-                            }
-                        }
-                    },
-                    pageSize: 10
-                },
-                height: 550,
-                pageable: true,
-                sortable: true,
-                filterable: true,
-                columns: [
-                    { field: "name", title: "Material Name", width: "200px" },
-                    { field: "category", title: "Category" },
-                    { field: "brand", title: "Brand" },
-                    { field: "unitPrice", title: "Unit Price", format: "{0:c}" },
-                    { field: "inStockQty", title: "Stock Qty" }
-                ]
-            });
-
-            // --- Form Submission Logic ---
-            $("#materialForm").on("submit", function (event) {
-                event.preventDefault();
-                if (validator.validate()) {
-                    const materialData = {
-                        name: $("#name").val(),
-                        category: $("#category").data("kendoDropDownList").value(),
-                        brand: $("#brand").val(),
-                        unitPrice: $("#unitPrice").data("kendoNumericTextBox").value(),
-                        unitOfMeasure: $("#unitOfMeasure").data("kendoRadioGroup").value(),
-                        inStockQty: $("#inStockQty").data("kendoNumericTextBox").value(),
-                        reorderLevel: $("#reorderLevel").data("kendoNumericTextBox").value(),
-                        gstPercent: $("#gstPercent").data("kendoNumericTextBox").value(),
-                        isActive: $("#isActive").data("kendoSwitch").check(),
-                        addedOn: kendo.toString($("#addedOn").data("kendoDatePicker").value(), "yyyy-MM-ddTHH:mm:ss")
-                    };
-
-                    $.ajax({
-                        url: "/api/materials",
-                        method: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify(materialData),
-                        success: function (response) {
-                            notification.show("Material saved successfully!", "success");
-                            $("#materialForm")[0].reset();
-                            $("#category").data("kendoDropDownList").select(0);
-                            $("#addedOn").data("kendoDatePicker").value(new Date());
-                            $("#isActive").data("kendoSwitch").check(true);
-                            // Switch to the list page to see the new entry
-                            showPage('listPage');
-                        },
-                        error: function (xhr) {
-                            var errorMessage = "An unknown error occurred.";
-                            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                                var errors = xhr.responseJSON.errors;
-                                var messages = [];
-                                for (var key in errors) {
-                                    if (errors.hasOwnProperty(key)) {
-                                        messages.push(errors[key].join(' '));
-                                    }
-                                }
-                                errorMessage = messages.join('<br>');
-                            }
-                            notification.show(errorMessage, "error");
-                        }
-                    });
-                }
-            });
-
-            // Show the create page by default when the app loads
-            showPage('createPage'); 
+        // Set default date to today
+        document.getElementById('addedOn').value = new Date().toISOString().split('T')[0];
+        
+        // Update switch label based on state
+        const switchInput = document.getElementById('isActive');
+        const switchLabel = document.getElementById('switch-label');
+        
+        switchInput.addEventListener('change', function() {
+            switchLabel.textContent = this.checked ? 'Active' : 'Inactive';
         });
+        
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            const formGroups = document.querySelectorAll('.form-group');
+            
+            // Clear previous errors
+            formGroups.forEach(group => group.classList.remove('error'));
+            
+            // Validate required fields
+            const requiredFields = [
+                { id: 'name', message: 'Material name is required' },
+                { id: 'category', message: 'Please select a category' },
+                { id: 'unitPrice', message: 'Price must be greater than 0' },
+                { id: 'gstPercent', message: 'GST percentage is required' }
+            ];
+            
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const formGroup = input.closest('.form-group');
+                
+                if (!input.value.trim() || (field.id === 'unitPrice' && parseFloat(input.value) <= 0)) {
+                    formGroup.classList.add('error');
+                    isValid = false;
+                }
+            });
+            
+            // Validate GST range
+            const gstInput = document.getElementById('gstPercent');
+            const gstValue = parseFloat(gstInput.value);
+            if (gstValue < 0 || gstValue > 28) {
+                gstInput.closest('.form-group').classList.add('error');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Collect form data
+        function collectFormData() {
+            const unitOfMeasure = document.querySelector('input[name="unitOfMeasure"]:checked').value;
+            
+            return {
+                name: document.getElementById('name').value.trim(),
+                category: document.getElementById('category').value,
+                brand: document.getElementById('brand').value.trim(),
+                unitPrice: parseFloat(document.getElementById('unitPrice').value) || 0,
+                unitOfMeasure: unitOfMeasure,
+                inStockQty: parseInt(document.getElementById('inStockQty').value) || 0,
+                reorderLevel: parseInt(document.getElementById('reorderLevel').value) || 0,
+                gstPercent: parseFloat(document.getElementById('gstPercent').value) || 0,
+                isActive: document.getElementById('isActive').checked,
+                addedOn: new Date(document.getElementById('addedOn').value).toISOString()
+            };
+        }
+        
+        // Reset form
+        function resetForm() {
+            document.getElementById('materialForm').reset();
+            document.getElementById('addedOn').value = new Date().toISOString().split('T')[0];
+            document.getElementById('isActive').checked = true;
+            switchLabel.textContent = 'Active';
+            
+            // Clear error states
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('error');
+            });
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+        
+        // Test data collection
+        document.getElementById('test-data-button').addEventListener('click', function() {
+            const testData = collectFormData();
+            console.log('Collected data:', testData);
+            showNotification('Data collected successfully! Check console for details.', 'info');
+        });
+        
+        // Form submission
+        document.getElementById('materialForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            if (validateForm()) {
+                const materialData = collectFormData();
+                console.log('Submitting material data:', materialData);
+                
+                // Show loading state
+                const submitBtn = document.getElementById('submit-button');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Saving...';
+                
+                // Simulate API call
+                fetch('/api/materials', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(materialData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Save successful:', data);
+                    showNotification('Material saved successfully!', 'success');
+                    resetForm();
+                })
+                .catch(error => {
+                    console.error('Save failed:', error);
+                    if (error.message.includes('Failed to fetch')) {
+                        showNotification('Demo mode: Material data logged to console', 'info');
+                        resetForm();
+                    } else {
+                        showNotification('Failed to save material: ' + error.message, 'error');
+                    }
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Save Material';
+                });
+            } else {
+                showNotification('Please correct the form errors', 'warning');
+            }
+        });
+        
+        // Add real-time validation
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                const formGroup = this.closest('.form-group');
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    formGroup.classList.add('error');
+                } else {
+                    formGroup.classList.remove('error');
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                const formGroup = this.closest('.form-group');
+                if (formGroup.classList.contains('error') && this.value.trim()) {
+                    formGroup.classList.remove('error');
+                }
+            });
+        });
+        
+        console.log('Material form initialized successfully!');
     </script>
 </body>
 </html>
