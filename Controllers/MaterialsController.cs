@@ -5,6 +5,7 @@ using MaterialApi.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace MaterialApi.Controllers
 {
@@ -48,6 +49,8 @@ namespace MaterialApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+            Console.WriteLine("Adding new material: " + material.Name);
+            Console.WriteLine("Adding new material: " + material.GstPercent);
 
             _context.Materials.Add(material);
             await _context.SaveChangesAsync();

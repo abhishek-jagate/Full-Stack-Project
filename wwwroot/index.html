@@ -2,192 +2,141 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Create Material - MaterialKing</title>
+    <title>Material King</title>
     <!-- Kendo UI CSS -->
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2024.2.514/styles/kendo.default-v2.min.css" />
     <!-- Custom Styles -->
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-
-        #materialForm {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        /* Kendo controls should take full width */
-        .k-textbox, .k-dropdownlist, .k-numerictextbox, .k-datepicker, .k-switch {
-            width: 100%;
-        }
-        
-        #submit-button {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-        }
-
-        /* Notification positioning */
-         #notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10005;
-        }
+        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #f4f4f4; }
+        #app-container { max-width: 900px; margin: 0 auto; }
+        .page-content { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: none; /* Pages are hidden by default */ }
+        h1, h2 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+        .k-textbox, .k-dropdownlist, .k-numerictextbox, .k-datepicker, .k-switch, .k-grid { width: 100%; }
+        #submit-button { width: 100%; padding: 12px; font-size: 16px; }
+        #notification { position: fixed; top: 20px; right: 20px; z-index: 10005; }
     </style>
 </head>
 <body>
 
-    <!-- Notification widget will appear here -->
     <span id="notification"></span>
 
     <div id="app-container">
-        <h1>Create New Material</h1>
-        
-        <!-- The form for creating a new material -->
-        <form id="materialForm">
+        <h1>Material King</h1>
 
-            <div class="form-group">
-                <label for="name">Material Name:</label>
-                <input id="name" required validationMessage="Please enter a name." />
-            </div>
+        <!-- Main Navigation -->
+        <div id="toolbar"></div>
 
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <input id="category" required validationMessage="Please select a category." />
-            </div>
+        <!-- Create Page Content -->
+        <div id="createPage" class="page-content">
+            <h2>Create New Material</h2>
+            <form id="materialForm">
+                <!-- Form fields from before -->
+                <div class="form-group"><label for="name">Material Name:</label><input id="name" required validationMessage="Please enter a name." /></div>
+                <div class="form-group"><label for="category">Category:</label><input id="category" required validationMessage="Please select a category." /></div>
+                <div class="form-group"><label for="brand">Brand:</label><input id="brand" /></div>
+                <div class="form-group"><label for="unitPrice">Unit Price:</label><input id="unitPrice" type="number" required min="0.01" validationMessage="Price must be greater than 0." /></div>
+                <div class="form-group"><label>Unit of Measure:</label><ul id="unitOfMeasure"></ul></div>
+                <div class="form-group"><label for="inStockQty">In Stock Quantity:</label><input id="inStockQty" type="number" /></div>
+                <div class="form-group"><label for="reorderLevel">Reorder Level:</label><input id="reorderLevel" type="number" /></div>
+                <div class="form-group"><label for="gstPercent">GST Percentage:</label><input id="gstPercent" type="number" required min="0" max="28" validationMessage="GST must be between 0 and 28." /></div>
+                <div class="form-group"><label for="addedOn">Purchase Date:</label><input id="addedOn" /></div>
+                <div class="form-group"><label for="isActive">Is Active:</label><input id="isActive" type="checkbox" /></div>
+                <button type="submit" id="submit-button" class="k-button k-button-md k-rounded-md k-button-solid-primary">Save Material</button>
+            </form>
+        </div>
 
-            <div class="form-group">
-                <label for="brand">Brand:</label>
-                <input id="brand" />
-            </div>
+        <!-- List Page Content -->
+        <div id="listPage" class="page-content">
+            <h2>Material List</h2>
+            <div id="materialsGrid"></div>
+        </div>
 
-            <div class="form-group">
-                <label for="unitPrice">Unit Price:</label>
-                <input id="unitPrice" type="number" required min="0.01" validationMessage="Price must be greater than 0." />
-            </div>
-
-            <div class="form-group">
-                <label>Unit of Measure:</label>
-                <ul id="unitOfMeasure"></ul>
-            </div>
-
-            <div class="form-group">
-                <label for="inStockQty">In Stock Quantity:</label>
-                <input id="inStockQty" type="number" />
-            </div>
-
-            <div class="form-group">
-                <label for="reorderLevel">Reorder Level:</label>
-                <input id="reorderLevel" type="number" />
-            </div>
-            
-            <div class="form-group">
-                <label for="gstPercent">GST Percentage:</label>
-                <input id="gstPercent" type="number" required min="0" max="28" validationMessage="GST must be between 0 and 28." />
-            </div>
-
-             <div class="form-group">
-                <label for="addedOn">Purchase Date:</label>
-                <input id="addedOn" />
-            </div>
-
-            <div class="form-group">
-                <label for="isActive">Is Active:</label>
-                <input id="isActive" type="checkbox" />
-            </div>
-
-            <button type="submit" id="submit-button" class="k-button k-button-md k-rounded-md k-button-solid-primary">Save Material</button>
-        </form>
     </div>
 
-    <!-- jQuery and Kendo UI JavaScript -->
+    <!-- *** CORRECTED SCRIPT ORDER *** -->
+    <!-- 1. jQuery must be loaded FIRST -->
     <script src="https://kendo.cdn.telerik.com/2024.2.514/js/jquery.min.js"></script>
+    <!-- 2. Kendo UI can now be loaded -->
     <script src="https://kendo.cdn.telerik.com/2024.2.514/js/kendo.all.min.js"></script>
-
+    
     <script>
         $(document).ready(function () {
-            // --- Initialize Kendo UI Widgets ---
-
-            // Initialize the notification widget
-            var notification = $("#notification").kendoNotification({
-                position: { top: 30, right: 30 },
-                autoHideAfter: 5000, // 5 seconds
-                stacking: "down"
-            }).data("kendoNotification");
-
-            // TextBoxes
-            $("#name").kendoTextBox();
-            $("#brand").kendoTextBox();
-
-            // DropDownList for Category
-            $("#category").kendoDropDownList({
-                dataSource: [ "Cement", "Steel", "Sand", "Aggregate", "Bricks" ],
-                optionLabel: "Select a category..."
+            // --- Navigation Logic ---
+            $("#toolbar").kendoToolBar({
+                items: [
+                    { type: "button", text: "Create New", click: () => showPage("createPage") },
+                    { type: "button", text: "View List", click: () => showPage("listPage") }
+                ]
             });
 
-            // NumericTextBoxes for numbers
+            function showPage(pageId) {
+                $(".page-content").hide(); // Hide all pages
+                $("#" + pageId).show(); // Show the requested page
+                if (pageId === 'listPage') {
+                    // Check if grid exists before trying to refresh
+                    var grid = $("#materialsGrid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read(); // Refresh grid data
+                    }
+                }
+            }
+
+            // --- Kendo Widget Initialization ---
+            var notification = $("#notification").kendoNotification({ position: { top: 30, right: 30 }, autoHideAfter: 5000, stacking: "down" }).data("kendoNotification");
+            $("#name").kendoTextBox();
+            $("#brand").kendoTextBox();
+            $("#category").kendoDropDownList({ dataSource: ["Cement", "Steel", "Sand", "Aggregate", "Bricks"], optionLabel: "Select a category..." });
             $("#unitPrice").kendoNumericTextBox({ format: "c", decimals: 2, min: 0.01 });
             $("#inStockQty").kendoNumericTextBox({ format: "n0", decimals: 0, min: 0 });
             $("#reorderLevel").kendoNumericTextBox({ format: "n0", decimals: 0, min: 0 });
             $("#gstPercent").kendoNumericTextBox({ format: "n2", min: 0, max: 28, step: 0.5 });
-
-            // RadioGroup for Unit of Measure
-            $("#unitOfMeasure").kendoRadioGroup({
-                items: [ "Bag", "Kg", "Ton" ],
-                layout: "horizontal",
-                value: "Bag" // Default value
-            });
-            
-            // DatePicker for the purchase date
-            $("#addedOn").kendoDatePicker({
-                value: new Date(), // Default to today
-                format: "yyyy-MM-dd"
-            });
-
-            // Switch for IsActive
-            $("#isActive").kendoSwitch({
-                checked: true,
-                messages: {
-                    checked: "Yes",
-                    unchecked: "No"
-                }
-            });
-
-            // Initialize Kendo Validator
+            $("#unitOfMeasure").kendoRadioGroup({ items: ["Bag", "Kg", "Ton"], layout: "horizontal", value: "Bag" });
+            $("#addedOn").kendoDatePicker({ value: new Date(), format: "yyyy-MM-dd" });
+            $("#isActive").kendoSwitch({ checked: true, messages: { checked: "Yes", unchecked: "No" } });
             var validator = $("#materialForm").kendoValidator().data("kendoValidator");
 
+            // --- Kendo Grid for Material List ---
+            $("#materialsGrid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/api/materials",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            fields: {
+                                materialId: { type: "number" },
+                                name: { type: "string" },
+                                category: { type: "string" },
+                                brand: { type: "string" },
+                                unitPrice: { type: "number" },
+                                inStockQty: { type: "number" }
+                            }
+                        }
+                    },
+                    pageSize: 10
+                },
+                height: 550,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                columns: [
+                    { field: "name", title: "Material Name", width: "200px" },
+                    { field: "category", title: "Category" },
+                    { field: "brand", title: "Brand" },
+                    { field: "unitPrice", title: "Unit Price", format: "{0:c}" },
+                    { field: "inStockQty", title: "Stock Qty" }
+                ]
+            });
 
-            // --- Handle Form Submission ---
+            // --- Form Submission Logic ---
             $("#materialForm").on("submit", function (event) {
-                event.preventDefault(); // Prevent the default form submission (page refresh)
-
-                // Check if the form is valid
+                event.preventDefault();
                 if (validator.validate()) {
-
-                    // Collect data from the Kendo widgets
                     const materialData = {
                         name: $("#name").val(),
                         category: $("#category").data("kendoDropDownList").value(),
@@ -200,8 +149,7 @@
                         isActive: $("#isActive").data("kendoSwitch").check(),
                         addedOn: kendo.toString($("#addedOn").data("kendoDatePicker").value(), "yyyy-MM-ddTHH:mm:ss")
                     };
-                    
-                    // Send the data to the backend API via AJAX
+
                     $.ajax({
                         url: "/api/materials",
                         method: "POST",
@@ -209,19 +157,16 @@
                         data: JSON.stringify(materialData),
                         success: function (response) {
                             notification.show("Material saved successfully!", "success");
-                            // Optional: Reset the form after successful submission
-                             $("#materialForm")[0].reset();
-                             // You might need to manually reset Kendo widgets to their defaults here
-                             $("#category").data("kendoDropDownList").select(0);
-                             $("#addedOn").data("kendoDatePicker").value(new Date());
-                             $("#isActive").data("kendoSwitch").check(true);
-
+                            $("#materialForm")[0].reset();
+                            $("#category").data("kendoDropDownList").select(0);
+                            $("#addedOn").data("kendoDatePicker").value(new Date());
+                            $("#isActive").data("kendoSwitch").check(true);
+                            // Switch to the list page to see the new entry
+                            showPage('listPage');
                         },
                         error: function (xhr) {
-                            // Try to parse the error response from the server
                             var errorMessage = "An unknown error occurred.";
                             if (xhr.responseJSON && xhr.responseJSON.errors) {
-                                // Handle validation errors from the backend
                                 var errors = xhr.responseJSON.errors;
                                 var messages = [];
                                 for (var key in errors) {
@@ -234,13 +179,12 @@
                             notification.show(errorMessage, "error");
                         }
                     });
-                } else {
-                     notification.show("Please correct the form errors.", "error");
                 }
             });
+
+            // Show the create page by default when the app loads
+            showPage('createPage'); 
         });
     </script>
-
 </body>
 </html>
-
