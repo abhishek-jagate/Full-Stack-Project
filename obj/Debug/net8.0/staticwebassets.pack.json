@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\index.html"
     },
     {
+      "Id": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\pages\\create.html",
+      "PackagePath": "staticwebassets\\pages\\create.html"
+    },
+    {
+      "Id": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\pages\\list.html",
+      "PackagePath": "staticwebassets\\pages\\list.html"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.MaterialApi.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

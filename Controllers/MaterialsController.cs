@@ -22,10 +22,55 @@ namespace MaterialApi.Controllers
 
         // GET: api/materials
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Material>>> GetMaterials()
+        // GET: api/materials
+[HttpGet]
+public async Task<IActionResult> GetMaterials(
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string? sortField = null,
+    [FromQuery] string? sortDir = "asc",
+    [FromQuery] string? name = null,
+    [FromQuery] string? category = null)
+{
+    var query = _context.Materials.AsQueryable();
+
+    // 🔎 Filtering
+    if (!string.IsNullOrWhiteSpace(name))
+        query = query.Where(m => m.Name != null && m.Name.Contains(name));
+    if (!string.IsNullOrWhiteSpace(category))
+        query = query.Where(m => m.Category != null && m.Category.Contains(category));
+
+    var total = await query.CountAsync();
+
+    // 🔃 Sorting
+    if (!string.IsNullOrWhiteSpace(sortField))
+    {
+        try
         {
-            return await _context.Materials.OrderByDescending(m => m.AddedOn).ToListAsync();
+            if (sortDir?.ToLower() == "desc")
+                query = query.OrderByDescending(m => EF.Property<object>(m, sortField));
+            else
+                query = query.OrderBy(m => EF.Property<object>(m, sortField));
         }
+        catch
+        {
+            query = query.OrderBy(m => m.MaterialId); // fallback
+        }
+    }
+    else
+    {
+        query = query.OrderBy(m => m.MaterialId);
+    }
+
+    // 📄 Paging
+    var items = await query
+        .Skip((Math.Max(1, page) - 1) * Math.Max(1, pageSize))
+        .Take(Math.Max(1, pageSize))
+        .ToListAsync();
+
+    return Ok(new { data = items, total });
+}
+
 
         // GET: api/materials/{id}
         [HttpGet("{id}")]

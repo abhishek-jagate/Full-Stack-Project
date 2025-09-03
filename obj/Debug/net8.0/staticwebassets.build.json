@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "x/kgyrJyqcOyh9Lli/1shz8IF6H42a9W68PlK3HOuRE=",
+  "Hash": "QYS5JwVZJBraKCqLMI7QO2BdeTfzAhyvKbz0AyrCKxA=",
   "Source": "MaterialApi",
   "BasePath": "_content/MaterialApi",
   "Mode": "Default",
@@ -34,6 +34,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\pages\\create.html",
+      "SourceId": "MaterialApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\",
+      "BasePath": "_content/MaterialApi",
+      "RelativePath": "pages/create.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\pages\\create.html"
+    },
+    {
+      "Identity": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\pages\\list.html",
+      "SourceId": "MaterialApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\",
+      "BasePath": "_content/MaterialApi",
+      "RelativePath": "pages/list.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\pages\\list.html"
     }
   ]
 }
