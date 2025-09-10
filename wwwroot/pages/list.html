@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Material List - MaterialKing</title>
     
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2023.3.1010/styles/kendo.default-v2.min.css" />
+
     <style>
         body {
+            
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -88,6 +90,7 @@
     <!-- jQuery + DataTables -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.3.1010/js/kendo.all.min.js"></script>
 
     <script>
         let materialsTable;
@@ -166,8 +169,8 @@
 
         // Edit material (placeholder)
         function editMaterial(id) {
-            showNotification('Edit functionality coming soon', 'info');
-        }
+    window.location.href = `/index.html?id=${id}`;
+}
 
         // Delete material
         function deleteMaterial(id) {

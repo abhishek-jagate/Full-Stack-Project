@@ -390,58 +390,45 @@
     </div>
 
     <script>
-        // Set default date to today
+        //
+        // --- YOUR ORIGINAL HELPER FUNCTIONS (NOW CORRECTLY INCLUDED) ---
+        //
         document.getElementById('addedOn').value = new Date().toISOString().split('T')[0];
-        
-        // Update switch label based on state
         const switchInput = document.getElementById('isActive');
         const switchLabel = document.getElementById('switch-label');
-        
         switchInput.addEventListener('change', function() {
             switchLabel.textContent = this.checked ? 'Active' : 'Inactive';
         });
-        
-        // Form validation
+
         function validateForm() {
             let isValid = true;
             const formGroups = document.querySelectorAll('.form-group');
-            
-            // Clear previous errors
             formGroups.forEach(group => group.classList.remove('error'));
-            
-            // Validate required fields
             const requiredFields = [
                 { id: 'name', message: 'Material name is required' },
                 { id: 'category', message: 'Please select a category' },
                 { id: 'unitPrice', message: 'Price must be greater than 0' },
                 { id: 'gstPercent', message: 'GST percentage is required' }
             ];
-            
             requiredFields.forEach(field => {
                 const input = document.getElementById(field.id);
                 const formGroup = input.closest('.form-group');
-                
                 if (!input.value.trim() || (field.id === 'unitPrice' && parseFloat(input.value) <= 0)) {
                     formGroup.classList.add('error');
                     isValid = false;
                 }
             });
-            
-            // Validate GST range
             const gstInput = document.getElementById('gstPercent');
             const gstValue = parseFloat(gstInput.value);
             if (gstValue < 0 || gstValue > 28) {
                 gstInput.closest('.form-group').classList.add('error');
                 isValid = false;
             }
-            
             return isValid;
         }
-        
-        // Collect form data
+
         function collectFormData() {
             const unitOfMeasure = document.querySelector('input[name="unitOfMeasure"]:checked').value;
-            
             return {
                 name: document.getElementById('name').value.trim(),
                 category: document.getElementById('category').value,
@@ -455,119 +442,123 @@
                 addedOn: new Date(document.getElementById('addedOn').value).toISOString()
             };
         }
-        
-        // Reset form
+
         function resetForm() {
             document.getElementById('materialForm').reset();
             document.getElementById('addedOn').value = new Date().toISOString().split('T')[0];
             document.getElementById('isActive').checked = true;
             switchLabel.textContent = 'Active';
-            
-            // Clear error states
             document.querySelectorAll('.form-group').forEach(group => {
                 group.classList.remove('error');
             });
         }
-        
-        // Show notification
+
         function showNotification(message, type = 'info') {
-            // Remove existing notifications
             const existingNotifications = document.querySelectorAll('.notification');
             existingNotifications.forEach(n => n.remove());
-            
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.textContent = message;
             document.body.appendChild(notification);
-            
-            // Show notification
             setTimeout(() => notification.classList.add('show'), 100);
-            
-            // Hide notification after 5 seconds
             setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => notification.remove(), 300);
             }, 5000);
         }
-        
-        // Test data collection
-        document.getElementById('test-data-button').addEventListener('click', function() {
-            const testData = collectFormData();
-            console.log('Collected data:', testData);
-            showNotification('Data collected successfully! Check console for details.', 'info');
-        });
-        
-        // Form submission
-        document.getElementById('materialForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            if (validateForm()) {
-                const materialData = collectFormData();
-                console.log('Submitting material data:', materialData);
-                
-                // Show loading state
-                const submitBtn = document.getElementById('submit-button');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Saving...';
-                
-                // Simulate API call
-                fetch('/api/materials', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(materialData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Save successful:', data);
-                    showNotification('Material saved successfully!', 'success');
-                    resetForm();
-                })
-                .catch(error => {
-                    console.error('Save failed:', error);
-                    if (error.message.includes('Failed to fetch')) {
-                        showNotification('Demo mode: Material data logged to console', 'info');
-                        resetForm();
-                    } else {
-                        showNotification('Failed to save material: ' + error.message, 'error');
-                    }
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Save Material';
-                });
-            } else {
-                showNotification('Please correct the form errors', 'warning');
+
+        //
+        // --- NEW COMBINED LOGIC FOR CREATE AND EDIT ---
+        //
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const materialId = urlParams.get('id');
+            const form = document.getElementById('materialForm');
+            const submitButton = document.getElementById('submit-button');
+
+            if (materialId) {
+                // --- EDIT MODE ---
+                document.querySelector('h1').textContent = 'Edit Material';
+                submitButton.textContent = 'Update Material';
+                fetch(`/api/materials/${materialId}`)
+                    .then(response => response.json())
+                    .then(material => {
+                        document.getElementById('name').value = material.name;
+                        document.getElementById('category').value = material.category;
+                        document.getElementById('brand').value = material.brand;
+                        document.getElementById('unitPrice').value = material.unitPrice;
+                        document.querySelector(`input[name="unitOfMeasure"][value="${material.unitOfMeasure}"]`).checked = true;
+                        document.getElementById('inStockQty').value = material.inStockQty;
+                        document.getElementById('reorderLevel').value = material.reorderLevel;
+                        document.getElementById('gstPercent').value = material.gstPercent;
+                        document.getElementById('addedOn').value = new Date(material.addedOn).toISOString().split('T')[0];
+                        document.getElementById('isActive').checked = material.isActive;
+                    });
             }
-        });
-        
-        // Add real-time validation
-        const inputs = document.querySelectorAll('.form-control');
-        inputs.forEach(input => {
-            input.addEventListener('blur', function() {
-                const formGroup = this.closest('.form-group');
-                if (this.hasAttribute('required') && !this.value.trim()) {
-                    formGroup.classList.add('error');
-                } else {
-                    formGroup.classList.remove('error');
+
+            // --- UNIVERSAL SUBMIT HANDLER ---
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                if (!validateForm()) {
+                    showNotification('Please correct the form errors', 'warning');
+                    return;
                 }
-            });
-            
-            input.addEventListener('input', function() {
-                const formGroup = this.closest('.form-group');
-                if (formGroup.classList.contains('error') && this.value.trim()) {
-                    formGroup.classList.remove('error');
+
+                const materialData = collectFormData();
+                let apiUrl = '/api/materials';
+                let httpMethod = 'POST';
+
+                if (materialId) {
+                    apiUrl = `/api/materials/${materialId}`;
+                    httpMethod = 'PUT';
+                    materialData.materialId = parseInt(materialId);
                 }
+
+                submitButton.disabled = true;
+                submitButton.textContent = 'Saving...';
+
+                fetch(apiUrl, {
+    method: httpMethod,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(materialData)
+})
+.then(async response => { // Add async here to wait for the error message
+    // If the status is 409 (Conflict), handle it specifically
+    if (response.status === 409) {
+        const errorMessage = await response.text(); // Get the text message from the API
+        throw new Error(errorMessage);
+    }
+    // For other errors
+    if (!response.ok) {
+        throw new Error('API request failed. Status: ' + response.status);
+    }
+    // If we are creating (POST), we expect a JSON response
+    if (httpMethod === 'POST') { 
+        return response.json(); 
+    }
+    // For updating (PUT), we might not get a body, so we don't need to parse it
+})
+.then(() => {
+    const successMessage = (httpMethod === 'PUT') ? 'Material updated successfully!' : 'Material saved successfully!';
+    showNotification(successMessage, 'success');
+    
+    if (httpMethod === 'POST') {
+        resetForm();
+    } else {
+        setTimeout(() => { window.location.href = 'materials.html'; }, 1500);
+    }
+})
+.catch(error => {
+    console.error('Save failed:', error);
+    // The error message will now be our custom one!
+    showNotification(error.message, 'error');
+})
+.finally(() => {
+    submitButton.disabled = false;
+    submitButton.textContent = materialId ? 'Update Material' : 'Save Material';
+});
             });
         });
-        
-        console.log('Material form initialized successfully!');
     </script>
 </body>
 </html>

@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\index.html"
     },
     {
+      "Id": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\js\\materials.js",
+      "PackagePath": "staticwebassets\\js\\materials.js"
+    },
+    {
+      "Id": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\materials.html",
+      "PackagePath": "staticwebassets\\materials.html"
+    },
+    {
       "Id": "C:\\Users\\Abhishek\\Downloads\\New Project\\MaterialApi\\wwwroot\\pages\\create.html",
       "PackagePath": "staticwebassets\\pages\\create.html"
     },
